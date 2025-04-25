@@ -1,8 +1,10 @@
 # Coachman
 
 ## TODO:
-- display in slider progress current / total
-- no workout yet card
-- no exercises yet list item
-- exercise store and editor like the workout one
-- exercise modal
+- confirmation windows for remove actions
+- falling emojis when the main "Coachman" button is clicked (very important feature)
+- workout session page
+- chart
+- use PouchDb or other wrapper for IndexedDB
+- slider instead of the progressbar in the carousel
+- multi profiles
