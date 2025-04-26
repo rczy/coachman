@@ -10,7 +10,7 @@
 <NavBar />
 
 {#key data.url}
-    <main class="grow container grid mx-auto my-8 px-4" in:fade>
+    <main class="grow container mx-auto my-8 px-4 flex flex-col" in:fade>
         {@render children()}
     </main>
 {/key}

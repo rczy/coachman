@@ -1,10 +1,5 @@
 import type { Exercise, Metric, Workout } from "./types";
 
-class WorkoutStore {
-    list: Workout[] = $state([])
-}
-export const workoutStore = new WorkoutStore()
-
 abstract class Editor<T extends {_id: string}> {
     subject: T = $state({} as T)
     protected container: T[] = []

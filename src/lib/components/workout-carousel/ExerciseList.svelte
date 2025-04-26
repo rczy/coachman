@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { exerciseEditor } from "$lib/data/state.svelte";
-    import type { Exercise, Workout } from "$lib/data/types";
+    import { exerciseEditor } from "$lib/editor.svelte";
+    import type { Exercise } from "$lib/types";
     import DotsMenu from "../DotsMenu.svelte";
     import Icon from "../Icon.svelte";
     import { flip } from "svelte/animate";

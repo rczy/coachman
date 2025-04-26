@@ -1,11 +1,13 @@
 <script lang="ts">
     import type { EmblaCarouselType, EmblaOptionsType, EmblaPluginType } from 'embla-carousel'
     import emblaCarouselSvelte from "embla-carousel-svelte";
-    import {workoutStore, workoutEditor} from "$lib/data/state.svelte"
-    import type { Workout } from "$lib/data/types"
+    import { workoutEditor } from "$lib/editor.svelte"
+    import { workoutStore } from '$lib/state.svelte';
+    import type { Workout } from "$lib/types"
     import Icon from '../Icon.svelte';
     import DotsMenu from '../DotsMenu.svelte';
     import ExerciseList from './ExerciseList.svelte';
+    import { onMount } from 'svelte';
 
     let carouselProgress = $state(0);
     let disablePrev = $state(true);
@@ -26,6 +28,7 @@
             })
             .on('scroll', applyProgress)
             .on('slideFocus', applyProgress);
+        applyProgress()
     }
 
     function applyProgress() {

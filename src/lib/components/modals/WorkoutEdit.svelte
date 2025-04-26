@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { workoutEditor } from "$lib/data/state.svelte";
+    import { workoutEditor } from "$lib/editor.svelte";
     import Modal from "../Modal.svelte";
 
     let show = $derived.by(() => workoutEditor.isActive())

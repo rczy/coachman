@@ -4,7 +4,7 @@
     import WorkoutEdit from "$lib/components/modals/WorkoutEdit.svelte";
 </script>
 
-<h1 class="text-2xl font-bold mb-8">Workouts</h1>
+<h1 class="text-2xl font-bold mb-8">Briefing</h1>
 
 <WorkoutBrowser />
 

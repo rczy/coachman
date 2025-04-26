@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { exerciseEditor, metricEditor } from "$lib/data/state.svelte";
+    import { exerciseEditor, metricEditor } from "$lib/editor.svelte";
     import Icon from "../Icon.svelte";
     import Modal from "../Modal.svelte";
 
