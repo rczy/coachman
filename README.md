@@ -4,7 +4,7 @@
 - confirmation windows for remove actions
 - falling emojis when the main "Coachman" button is clicked (very important feature)
 - support links in workout descriptions
-- workout session page
+- workout session page: overview at end
 - chart
 - use PouchDb or other wrapper for IndexedDB
 - splash screen

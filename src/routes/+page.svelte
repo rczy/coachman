@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import ExerciseEdit from "$lib/components/modals/ExerciseEdit.svelte";
     import WorkoutBrowser from "$lib/components/fragments/WorkoutBrowser.svelte";
     import WorkoutEdit from "$lib/components/modals/WorkoutEdit.svelte";
