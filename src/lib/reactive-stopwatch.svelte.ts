@@ -1,4 +1,4 @@
-export class StopWatch {
+export class ReactiveStopwatch {
     private elapsed = $state(0)
     private interval: number | undefined
 

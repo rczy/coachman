@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { StopWatch } from "$lib/stopwatch.svelte";
+    import { ReactiveStopwatch } from "$lib/reactive-stopwatch.svelte";
 
     interface Props {
         countFrom: number
@@ -7,7 +7,7 @@
     }
     let { countFrom = 0, classes = '' } = $props()
 
-    let stopwatch = new StopWatch(countFrom)
+    let stopwatch = new ReactiveStopwatch(countFrom)
     
     $effect(() => {
         return () => {
@@ -15,16 +15,8 @@
         }
     })
 
-    export function start() {
-        stopwatch.start()
-    }
-
-    export function stop() {
-        stopwatch.stop()
-    }
-
-    export function reset() {
-        stopwatch.reset()
+    export const getWatch = (): ReactiveStopwatch => {
+        return stopwatch
     }
 </script>
 
@@ -34,4 +26,4 @@
     <span style="--value:{stopwatch.getMinutes()};" aria-live="polite" aria-label="{stopwatch.getMinutes().toString()}">{stopwatch.getMinutes()}</span>
     :
     <span style="--value:{stopwatch.getSeconds()};" aria-live="polite" aria-label="{stopwatch.getSeconds().toString()}">{stopwatch.getSeconds()}</span>
-  </span>
+</span>
