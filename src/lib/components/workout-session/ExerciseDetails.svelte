@@ -1,26 +1,25 @@
 <script lang="ts">
-    import type { Exercise, Metric, Trend } from '$lib/types';
+    import type { Exercise, Metric, MetricValue } from '$lib/types';
     import { fly } from 'svelte/transition';
 
     interface Props {
         exercise: Exercise
-        onSkip: Function
-        onNext: Function
+        onSkip: () => void
+        onNext: (results: MetricValue[]) => void
     }
     let { exercise, onSkip, onNext }: Props = $props()
 
-    let metricsToSave: (number | undefined)[] = $state([])
+    let metricsToSave: MetricValue[] = $state([])
     let canStepForward = $derived.by(() => {
         for (let metric of metricsToSave) {
-            if (metric == undefined) return false
+            if (metric == null) return false
         }
         return true
     })
 
-    const getMetricColor = (currentValue: (number | undefined), goal: Metric): string => {
+    const getMetricColor = (currentValue: MetricValue, goal: Metric): string => {
         if (currentValue == null || goal.value == null) return '' // intentional loose check
-        const goalReached = (goal.trend === 1) ? (currentValue >= goal.value) : (currentValue < goal.value)
-        return goalReached ? 'input-success' : 'input-warning'
+        return (goal.trend * Math.sign(currentValue - goal.value)) >= 0 ? 'input-success' : 'input-warning'
     }
 
     $effect(() => {
@@ -47,7 +46,7 @@
         </div>
         <div class="flex justify-between mt-5">
             <button class="btn btn-ghost basis-1/3" onclick={() => onSkip()}>Skip</button>
-            <button class="btn btn-success basis-1/3" onclick={() => onNext()} disabled={!canStepForward}>Next</button>
+            <button class="btn btn-success basis-1/3" onclick={() => onNext(metricsToSave)} disabled={!canStepForward}>Next</button>
         </div>
     </div>
 {/key}

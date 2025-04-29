@@ -117,6 +117,7 @@
     {:else}
         <button class="btn btn-accent btn-block sm:basis-1/2" disabled>Let's do it!</button>
     {/if}
+    <button class="btn btn-ghost"onclick={() => console.log($state.snapshot(workout))}>Data dump</button>
 {/snippet}
 
 {#snippet noWorkout()}

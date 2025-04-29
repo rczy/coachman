@@ -1,9 +1,11 @@
-export type Trend = 1 | -1
+export type Trend = 1 | 0 | -1
+
+export type MetricValue = number | undefined
 
 export interface Metric {
     _id: string;
     name: string;
-    value?: number;
+    value?: MetricValue;
     unit?: string;
     trend: Trend
 }
@@ -16,14 +18,14 @@ export interface Exercise {
     metrics: Metric[];
 }
 
-interface PerformedExercise {
+export interface PerformedExercise {
     exerciseId: string;
-    perceivedDifficulty?: number;
     results: Metric[];
 }
 
-interface WorkoutSession {
+export interface WorkoutSession {
     date: Date;
+    duration: number;
     performedExercises: PerformedExercise[];
 }
 
