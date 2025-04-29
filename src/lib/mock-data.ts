@@ -42,7 +42,8 @@ const getMockMetric = (): Metric => {
         _id: crypto.randomUUID(),
         name: names[getRandomInt(names.length)],
         value: getRandomInt(20) + 1,
-        unit: units[getRandomInt(units.length)]
+        unit: units[getRandomInt(units.length)],
+        trend: getRandomInt(10) < 7 ? 1 : -1
     }
 }
 

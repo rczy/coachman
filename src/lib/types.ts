@@ -1,8 +1,11 @@
+export type Trend = 1 | -1
+
 export interface Metric {
     _id: string;
     name: string;
     value?: number;
     unit?: string;
+    trend: Trend
 }
 
 export interface Exercise {

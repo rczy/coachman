@@ -65,6 +65,14 @@
         <input class="input join-item" placeholder="Name" bind:value={metricEditor.subject.name}/>
         <input class="input join-item" type="number" placeholder="Goal" bind:value={metricEditor.subject.value}/>
         <input class="input join-item" placeholder="Unit" bind:value={metricEditor.subject.unit}/>
+
+        <button class="btn tooltip"
+            onclick={() => metricEditor.subject.trend *= -1}
+            data-tip={metricEditor.subject.trend == 1 ? 'More is better' : 'Less is better'}
+            disabled={!(metricEditor.subject.name && metricEditor.subject.value)}
+        >
+            <Icon type={metricEditor.subject.trend == 1 ? 'Up' : 'Down'} />
+        </button>
         <button class="btn btn-success join-item"
             onclick={() => {metricEditor.submit(); metricEditor.editNew(exerciseEditor.subject.metrics)}}
             disabled={!(metricEditor.subject.name && metricEditor.subject.value)}
@@ -78,7 +86,7 @@
             <button class="btn badge badge-neutral badge-outline"
                 onclick={() => metricEditor.edit($state.snapshot(metric), exerciseEditor.subject.metrics)}
             >
-                {metric.name}: {metric.value} {metric?.unit}
+                {metric.name}: {metric.value} {metric?.unit} <Icon type={metric.trend == 1 ? 'Up' : 'Down'} />
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <span class="btn btn-xs btn-circle size-[1.5em]"

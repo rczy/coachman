@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Exercise, Metric } from '$lib/types';
+    import type { Exercise, Metric, Trend } from '$lib/types';
     import { fly } from 'svelte/transition';
 
     interface Props {
@@ -16,6 +16,12 @@
         }
         return true
     })
+
+    const getMetricColor = (currentValue: (number | undefined), goal: Metric): string => {
+        if (currentValue == null || goal.value == null) return '' // intentional loose check
+        const goalReached = (goal.trend === 1) ? (currentValue >= goal.value) : (currentValue < goal.value)
+        return goalReached ? 'input-success' : 'input-warning'
+    }
 
     $effect(() => {
         metricsToSave = exercise.metrics.map(() => undefined)
@@ -48,7 +54,7 @@
 
 {#snippet metricInput(metric: Metric, idx: number)}
     <div class="my-2">
-        <label class="input w:80 sm:w-100">
+        <label class={["input w:80 sm:w-100", getMetricColor(metricsToSave[idx], metric)]}>
             <span class="basis-1/2">{metric.name}</span>
             <input type="number" class="grow" placeholder={metric.value?.toString()} bind:value={metricsToSave[idx]}/>
             <span>{metric.unit}</span>

@@ -10,3 +10,4 @@
 - splash screen
 - slider instead of the progressbar in the carousel
 - multi profiles
+- (mobile build; capacitor?)

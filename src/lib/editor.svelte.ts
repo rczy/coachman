@@ -38,9 +38,10 @@ abstract class Editor<T extends {_id: string}> {
     }
 
     clone(item: T, container: T[] = []): void {
+        const idx = container.findIndex(el => item._id === el._id)
         const cloned = structuredClone(item)
         cloned._id = crypto.randomUUID()
-        container.push(cloned)
+        container.splice(idx + 1, 0, cloned)
     }
 
     remove(item: T, container: T[] = []) {
@@ -92,6 +93,7 @@ class MetricEditor extends Editor<Metric> {
         return {
             _id: '',
             name: '',
+            trend: 1
         }
     }
 }

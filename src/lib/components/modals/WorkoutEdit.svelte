@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { appEvents } from "$lib/app-events";
     import { workoutEditor } from "$lib/editor.svelte";
     import Modal from "../Modal.svelte";
 
@@ -17,6 +18,6 @@
 
     {#snippet action()}
         <button class="btn btn-ghost" onclick={() => workoutEditor.cancel()}>Cancel</button>
-        <button class="btn btn-success" onclick={() => workoutEditor.submit()} disabled={!workoutEditor.subject.name}>{workoutEditor.isSubjectNew() ? "Add" : "Done"}</button>
+        <button class="btn btn-success" onclick={() => { workoutEditor.submit(); appEvents.emit('WorkoutAdded') }} disabled={!workoutEditor.subject.name}>{workoutEditor.isSubjectNew() ? "Add" : "Done"}</button>
     {/snippet}
 </Modal>

@@ -7,7 +7,7 @@
     import Icon from '../Icon.svelte';
     import DotsMenu from '../DotsMenu.svelte';
     import ExerciseList from './ExerciseList.svelte';
-    import { onMount } from 'svelte';
+    import { appEvents } from '$lib/app-events';
 
     let carouselProgress = $state(0);
     let disablePrev = $state(true);
@@ -17,28 +17,59 @@
     let emblaApi: EmblaCarouselType;
     let options: EmblaOptionsType = { loop: false };
     let plugins: EmblaPluginType[] = [];
+    let scrollToEnd = false
 
     function onemblaInit(event: CustomEvent<EmblaCarouselType>) {
         emblaApi = event.detail;
         emblaApi
             .on('init', applyProgress)
-            .on('reInit', () => {
-                applyProgress();
-                emblaApi.scrollTo(listLength - 1);
-            })
+            .on('reInit', applyProgress)
             .on('scroll', applyProgress)
-            .on('slideFocus', applyProgress);
-        applyProgress()
+            .on('slideFocus', applyProgress)
+            .on('slidesChanged', () => {
+                if (scrollToEnd) {
+                    emblaApi?.scrollTo(listLength - 1);
+                    scrollToEnd = false;
+                }
+            });
+        applyProgress();
     }
 
-    function applyProgress() {
+    const applyProgress = () => {
         carouselProgress = Math.max(0, Math.min(1, emblaApi.scrollProgress())) * 100;
         disablePrev = !emblaApi.canScrollPrev();
         disableNext = !emblaApi.canScrollNext();
     }
+
+    $effect(() => {
+        const unsubscribe = appEvents.listen('WorkoutAdded', () => {
+            scrollToEnd = true
+        })
+        return () => {
+            unsubscribe()
+        }
+    })
 </script>
 
 <div>
+    {@render controls()}
+
+    <div class="embla overflow-hidden pb-3 px-3" use:emblaCarouselSvelte="{{ options, plugins }}" {onemblaInit}>
+        <div class="embla__container flex gap-5">
+            {#if listLength}
+                {#each workoutStore.list as workout}
+                    <div class="embla__slide flex-[0_0_100%] min-w-0">
+                        {@render workoutCard(workout)}
+                    </div>
+                {/each}
+            {:else}
+                {@render noWorkout()}
+            {/if}
+        </div>
+    </div>
+</div>
+
+{#snippet controls()}
     {#if listLength}
         <div class="px-3 my-3 flex flex-1 items-center gap-2">
             {#if listLength > 1}
@@ -57,21 +88,7 @@
             <span class="size-10"></span>
         </div>
     {/if}
-
-    <div class="embla overflow-hidden pb-3 px-3" use:emblaCarouselSvelte="{{ options, plugins }}" {onemblaInit}>
-        <div class="embla__container flex gap-5">
-            {#if listLength}
-                {#each workoutStore.list as workout}
-                    <div class="embla__slide flex-[0_0_100%] min-w-0">
-                        {@render workoutCard(workout)}
-                    </div>
-                {/each}
-            {:else}
-                {@render noWorkouts()}
-            {/if}
-        </div>
-    </div>
-</div>
+{/snippet}
 
 {#snippet workoutCard(workout: Workout)}
     <div class="card bg-base-200 shadow-md">
@@ -102,7 +119,7 @@
     {/if}
 {/snippet}
 
-{#snippet noWorkouts()}
+{#snippet noWorkout()}
 <div class="card bg-base-200 shadow-md flex-[0_0_100%] min-w-0">
     <div class="card-body">
         <div class="card-title mb-2 size-10"></div>
