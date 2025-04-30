@@ -1,6 +1,7 @@
 <script lang="ts">
     import { exerciseEditor } from "$lib/editor.svelte";
     import type { Exercise } from "$lib/types";
+    import { linkify } from "$lib/utils";
     import DotsMenu from "../DotsMenu.svelte";
     import Icon from "../Icon.svelte";
     import { flip } from "svelte/animate";
@@ -64,7 +65,7 @@
 
     {#if exercise.description}
         <p class="list-col-wrap text-xs hidden sm:block">
-            {exercise.description}
+            {@html linkify(exercise.description)}
         </p>    
     {/if}
 

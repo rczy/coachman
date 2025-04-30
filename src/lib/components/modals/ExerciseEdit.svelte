@@ -19,6 +19,16 @@
         reader.readAsDataURL(image)
     }
 
+    const cancel = () => {
+        metricEditor.cancel()
+        exerciseEditor.cancel()
+    }
+
+    const submit = () => {
+        metricEditor.cancel()
+        exerciseEditor.submit()
+    }
+
     $effect(() => {
         if (!exerciseEditor.isActive()) return
 
@@ -55,8 +65,8 @@
     </div>
 
     {#snippet action()}
-        <button class="btn btn-ghost" onclick={() => exerciseEditor.cancel()}>Cancel</button>
-        <button class="btn btn-success" onclick={() => exerciseEditor.submit()} disabled={!exerciseEditor.subject.name}>{exerciseEditor.isSubjectNew() ? "Add" : "Done"}</button>
+        <button class="btn btn-ghost" onclick={cancel}>Cancel</button>
+        <button class="btn btn-success" onclick={submit} disabled={!exerciseEditor.subject.name}>{exerciseEditor.isSubjectNew() ? "Add" : "Done"}</button>
     {/snippet}
 </Modal>
 

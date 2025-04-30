@@ -2,6 +2,7 @@
     import type { Exercise, MetricValue } from '$lib/types';
     import { fly } from 'svelte/transition';
     import MetricInput from './MetricInput.svelte';
+    import { linkify } from '$lib/utils';
 
     interface Props {
         exercise: Exercise
@@ -32,7 +33,7 @@
         {/if}
         {#if exercise.description}
             <p class="mb-5">
-                {exercise.description}
+                {@html linkify(exercise.description)}
             </p>
         {/if}
         <div class="flex flex-col items-center">
