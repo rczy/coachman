@@ -8,11 +8,15 @@
     import DotsMenu from '../DotsMenu.svelte';
     import ExerciseList from './ExerciseList.svelte';
     import { appEvents } from '$lib/app-events';
+    import Confirmation from '../modals/Confirmation.svelte';
 
     let carouselProgress = $state(0);
     let disablePrev = $state(true);
     let disableNext = $state(true);
     let listLength = $derived(workoutStore.list.length)
+
+    // svelte-ignore non_reactive_update
+    let deleteConfirmation: Confirmation
 
     let emblaApi: EmblaCarouselType;
     let options: EmblaOptionsType = { loop: false };
@@ -67,6 +71,8 @@
             {/if}
         </div>
     </div>
+
+    <Confirmation bind:this={deleteConfirmation} />
 </div>
 
 {#snippet controls()}
@@ -98,7 +104,9 @@
 
                 <DotsMenu options={[
                     {title: "Edit", icon: "Edit", item: workout, action: (item: any) => workoutEditor.edit($state.snapshot(item), workoutStore.list)},
-                    {title: "Remove", icon: "Remove", item: workout, action: (item: any) => workoutEditor.remove(item, workoutStore.list)},
+                    {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
+                        deleteConfirmation.show(`Remove "${item.name}"?`, () => workoutEditor.remove(item, workoutStore.list))}
+                    },
                 ]}/>
             </h2>
 

@@ -5,6 +5,7 @@
     import DotsMenu from "../DotsMenu.svelte";
     import Icon from "../Icon.svelte";
     import { flip } from "svelte/animate";
+    import Confirmation from '../modals/Confirmation.svelte';
 
     interface Props {
         exercises: Exercise[]
@@ -12,6 +13,8 @@
     let {exercises = $bindable()}: Props = $props();
 
     let listLength = $derived(exercises.length)
+
+    let deleteConfirmation: Confirmation
 
     function swap(idx: number, offset: number) {
         [exercises[idx], exercises[idx + offset]] = [exercises[idx + offset], exercises[idx]];
@@ -44,6 +47,8 @@
     </div>
 {/if}
 
+<Confirmation bind:this={deleteConfirmation} />
+
 {#snippet exerciseCard(exercise: Exercise, idx: number, isFirst: boolean, isLast: boolean)}
 <li class="list-row">
     <div>
@@ -73,7 +78,9 @@
         <DotsMenu classes={"dropdown-end"} options={[
             {title: "Edit", icon: "Edit", item: exercise, action: (item: any) => exerciseEditor.edit($state.snapshot(item), exercises)},
             {title: "Clone", icon: "Clone", item: exercise, action: (item: any) => exerciseEditor.clone($state.snapshot(item), exercises)},
-            {title: "Remove", icon: "Remove", item: exercise, action: (item: any) => exerciseEditor.remove(item, exercises)},
+            {title: "Remove", icon: "Remove", item: exercise, action: (item: any) => {
+                deleteConfirmation.show(`Remove "${item.name}"?`, () => exerciseEditor.remove(item, exercises))
+            }},
         ]}/>
 
         <div class="flex flex-col ml-2">
