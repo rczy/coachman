@@ -4,8 +4,9 @@
     interface Props {
         exerciseData: Exercise
         performedExercise: PerformedExercise | undefined
+        onAdjust: (goal: Metric, result: Metric, saveTo: Metric[]) => void
     }
-    let { exerciseData, performedExercise }: Props = $props()
+    let { exerciseData, performedExercise, onAdjust }: Props = $props()
 
     const getMetricResult = (metricId: string): Metric => {
         return performedExercise?.results.find(res => res._id === metricId) ?? {} as Metric
@@ -32,10 +33,12 @@
 </li>
 
 {#snippet metricBadge(goal: Metric, result: Metric)}
-    <div class={[
-        "badge badge-outline",
-        goal.trend * result.trend >= 0 ? 'badge-success' : 'badge-warning'
-    ]}>
+    <button class={[
+            'btn badge badge-outline',
+            goal.trend * result.trend >= 0 ? 'badge-success' : 'badge-warning'
+        ]}
+        onclick={() => onAdjust(goal, result, performedExercise?.results ?? [])}
+    >
         {goal.trend * result.trend > 0 ? '🔥' : ''} {goal.name}: {result.value} / {goal.value} {goal.unit}
-    </div>
+    </button>
 {/snippet}

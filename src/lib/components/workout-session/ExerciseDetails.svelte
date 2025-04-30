@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { Exercise, Metric, MetricValue } from '$lib/types';
+    import type { Exercise, MetricValue } from '$lib/types';
     import { fly } from 'svelte/transition';
+    import MetricInput from './MetricInput.svelte';
 
     interface Props {
         exercise: Exercise
@@ -11,16 +12,11 @@
 
     let metricsToSave: MetricValue[] = $state([])
     let canStepForward = $derived.by(() => {
-        for (let metric of metricsToSave) {
-            if (metric == null) return false
+        for (const result of metricsToSave) {
+            if (result == null) return false
         }
         return true
     })
-
-    const getMetricColor = (currentValue: MetricValue, goal: Metric): string => {
-        if (currentValue == null || goal.value == null) return '' // intentional loose check
-        return (goal.trend * Math.sign(currentValue - goal.value)) >= 0 ? 'input-success' : 'input-warning'
-    }
 
     $effect(() => {
         metricsToSave = exercise.metrics.map(() => undefined)
@@ -40,8 +36,8 @@
             </p>
         {/if}
         <div class="flex flex-col items-center">
-            {#each exercise.metrics as metric, idx}
-                {@render metricInput(metric, idx)}
+            {#each exercise.metrics as goal, idx}
+                <MetricInput {goal} bind:result={metricsToSave[idx]}/>
             {/each}
         </div>
         <div class="flex justify-between mt-5">
@@ -50,13 +46,3 @@
         </div>
     </div>
 {/key}
-
-{#snippet metricInput(metric: Metric, idx: number)}
-    <div class="my-2">
-        <label class={["input w:80 sm:w-100", getMetricColor(metricsToSave[idx], metric)]}>
-            <span class="basis-1/2">{metric.name}</span>
-            <input type="number" class="grow" placeholder={metric.value?.toString()} bind:value={metricsToSave[idx]}/>
-            <span>{metric.unit}</span>
-          </label>
-    </div>
-{/snippet}

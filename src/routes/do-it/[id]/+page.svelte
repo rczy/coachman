@@ -68,6 +68,6 @@
 
 {#snippet aside()}
     <aside class="lg:flex flex-col gap-5 items-start justify-start mb-8">
-        <WorkoutInfo bind:this={workoutInfo} workoutName={data.name} progress={currentIdx + 1} total={data.exercises.length}/>
+        <WorkoutInfo bind:this={workoutInfo} workoutName={data.name} progress={currentIdx + 1} total={data.exercises.length} isDone={!inProgress}/>
     </aside>
 {/snippet}

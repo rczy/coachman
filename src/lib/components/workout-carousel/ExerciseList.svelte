@@ -57,9 +57,6 @@
         {#each exercise.metrics as metric}
             <div class="badge badge-ghost">
                 {metric.name}: {metric.value} {metric.unit}
-                <div class="tooltip tooltip-left" data-tip={metric.trend == 1 ? 'More is better' : 'Less is better'}>
-                    <Icon type={metric.trend == 1 ? 'Up' : 'Down'} />
-                </div>
             </div>
         {/each}
       </div>

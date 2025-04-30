@@ -121,16 +121,16 @@
 {/snippet}
 
 {#snippet noWorkout()}
-<div class="card bg-base-200 shadow-md flex-[0_0_100%] min-w-0">
-    <div class="card-body">
-        <div class="card-title mb-2 size-10"></div>
-        <div class="min-h-100 max-h-100 flex flex-col items-center justify-center">
-            <span class="my-6">No workouts yet.</span>
-            <button class="btn btn-accent" onclick={() => workoutEditor.editNew(workoutStore.list)}>
-                Add a workout
-            </button>
+    <div class="card bg-base-200 shadow-md flex-[0_0_100%] min-w-0">
+        <div class="card-body">
+            <div class="card-title mb-2 size-10"></div>
+            <div class="min-h-100 max-h-100 flex flex-col items-center justify-center">
+                <span class="my-6">No workouts yet.</span>
+                <button class="btn btn-accent" onclick={() => workoutEditor.editNew(workoutStore.list)}>
+                    Add a workout
+                </button>
+            </div>
+            <div class="card-actions justify-center mt-4 size-10"></div>
         </div>
-        <div class="card-actions justify-center mt-4 size-10"></div>
     </div>
-</div>
 {/snippet}
