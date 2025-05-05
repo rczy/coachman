@@ -10,6 +10,11 @@
     import { appEvents } from '$lib/app-events';
     import Confirmation from '../modals/Confirmation.svelte';
 
+    interface Props {
+        currentIdx: number
+    }
+    let { currentIdx = $bindable() }: Props = $props()
+
     let carouselProgress = $state(0);
     let disablePrev = $state(true);
     let disableNext = $state(true);
@@ -35,6 +40,7 @@
                     emblaApi?.scrollTo(listLength - 1);
                     scrollToEnd = false;
                 }
+                refreshCurrentIdx()
             });
         applyProgress();
     }
@@ -43,6 +49,10 @@
         carouselProgress = Math.max(0, Math.min(1, emblaApi.scrollProgress())) * 100;
         disablePrev = !emblaApi.canScrollPrev();
         disableNext = !emblaApi.canScrollNext();
+    }
+
+    const refreshCurrentIdx = () => {
+        currentIdx = emblaApi?.selectedScrollSnap()
     }
 
     $effect(() => {
@@ -79,9 +89,9 @@
     {#if listLength}
         <div class="px-3 my-3 flex flex-1 items-center gap-2">
             {#if listLength > 1}
-            <button class="btn" onclick="{() => emblaApi?.scrollPrev()}" disabled="{disablePrev}">❮</button>
-            <progress class="progress progress-neutral basis-1/4 opacity-10" value="{carouselProgress.toFixed(2)}" max="100"></progress>
-            <button class="btn" onclick="{() => emblaApi?.scrollNext()}" disabled="{disableNext}">❯</button>
+                <button class="btn" onclick="{() => { emblaApi?.scrollPrev(); refreshCurrentIdx() }}" disabled="{disablePrev}">❮</button>
+                <progress class="progress progress-neutral basis-1/4 opacity-10" value="{carouselProgress.toFixed(2)}" max="100"></progress>
+                <button class="btn" onclick="{() => { emblaApi?.scrollNext(); refreshCurrentIdx() }}" disabled="{disableNext}">❯</button>
             {/if}
             <div class="tooltip tooltip-left ml-auto" data-tip="Add new workout">
                 <button class="btn btn-square" onclick={() => workoutEditor.editNew(workoutStore.list)}>
@@ -105,8 +115,8 @@
                 <DotsMenu options={[
                     {title: "Edit", icon: "Edit", item: workout, action: (item: any) => workoutEditor.edit($state.snapshot(item), workoutStore.list)},
                     {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
-                        deleteConfirmation.show(`Remove "${item.name}"?`, () => workoutEditor.remove(item, workoutStore.list))}
-                    },
+                        deleteConfirmation.show(`Remove "${item.name}"?`, () => workoutEditor.remove(item, workoutStore.list))
+                    }},
                 ]}/>
             </h2>
 
