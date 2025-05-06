@@ -43,7 +43,7 @@
         <button class="btn btn-success w-60 mt-7"
             onclick={() => {
                 workout.sessions.push(workoutSession)
-                goto('/')
+                goto(`/${workout._id}`)
             }}
         >
             Finish session

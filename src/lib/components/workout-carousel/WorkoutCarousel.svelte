@@ -42,6 +42,7 @@
                 }
                 refreshCurrentIdx()
             });
+        emblaApi.scrollTo(currentIdx)
         applyProgress();
     }
 

@@ -3,7 +3,12 @@
     import WorkoutCarousel from "../workout-carousel/WorkoutCarousel.svelte";
     import { workoutStore } from "$lib/state.svelte";
 
-    let currentIdx = $state(0)
+    interface Props {
+        index: number
+    }
+    let { index }: Props = $props()
+
+    let currentIdx = $state(index)
 </script>
 
 <div class="xl:grid grid-cols-2 gap-3">
