@@ -1,10 +1,11 @@
-type AppEvent = 'WorkoutAdded'
-type Handler = () => void
+type AppEvent = 'WorkoutAdded' | 'DatasetEdit'
+type Handler = (details?: any) => void
 type Handlers = {[K in AppEvent]: Handler[]}
 
 class AppEvents {
     private handlers: Handlers = {
-        WorkoutAdded: []
+        WorkoutAdded: [],
+        DatasetEdit: [],
     }
 
     listen(event: AppEvent, handler: Handler) {
@@ -14,9 +15,9 @@ class AppEvents {
         }
     }
 
-    emit(event: AppEvent) {
+    emit(event: AppEvent, details?: any) {
         for (const handler of this.handlers[event]) {
-            handler()
+            handler(details)
         }
     }
 }

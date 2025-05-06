@@ -10,14 +10,14 @@ export const getMockWorkouts = (count: number): Workout[] => {
 
 const getMockWorkout = (): Workout => {
     const exercises = []
-    for (let i = 0; i < getRandomInt(10) + 1; i++) {
+    for (let i = 0; i < getRandomInt(3) + 1; i++) {
         exercises.push(getMockExercise())
     }
     return {
         _id: crypto.randomUUID(),
         name: `Awesome workout #${getRandomInt(100)}`,
         exercises: exercises,
-        sessions: []
+        sessions: [],
     }
 }
 

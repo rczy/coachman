@@ -114,6 +114,7 @@
 
                 <DotsMenu options={[
                     {title: "Edit", icon: "Edit", item: workout, action: (item: any) => workoutEditor.edit($state.snapshot(item), workoutStore.list)},
+                    {title: "Chart", icon: "Chart", item: workout, action: (item: any) => appEvents.emit('DatasetEdit', {workout: item})},
                     {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
                         deleteConfirmation.show(`Remove "${item.name}"?`, () => workoutEditor.remove(item, workoutStore.list))
                     }},

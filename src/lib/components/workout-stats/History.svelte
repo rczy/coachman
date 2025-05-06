@@ -11,6 +11,11 @@
     const getExerciseResults = (id: string, list: PerformedExercise[]): Metric[] => {
         return list.find(item => item.exerciseId === id)?.results as Metric[]
     }
+
+    const hms = (seconds: number) => {
+        const matches = new Date(seconds * 1000).toISOString().match(/T([0-9:]+)./)?.at(1)
+        return matches ?? '-'
+    }
 </script>
 
 <div class="md:h-130 overflow-auto">
@@ -41,8 +46,8 @@
 {#snippet body()}
     {#each [...workout.sessions].reverse() as session}
         <tr>
-            <td>{session.date.toLocaleDateString()}</td>
-            <td>{session.duration}</td>
+            <td>{session.date.toLocaleString()}</td>
+            <td>{hms(session.duration)}</td>
             {#each filteredExercises as exercise}
                 <td>
                     {@render metrics(getExerciseResults(exercise._id, session.performedExercises))}

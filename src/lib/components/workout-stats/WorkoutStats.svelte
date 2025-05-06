@@ -2,6 +2,7 @@
     import type { Workout } from "$lib/types";
     import { fade } from "svelte/transition";
     import History from "./History.svelte";
+    import Chart from "./Chart.svelte";
 
     interface Props {
         workout: Workout
@@ -14,7 +15,7 @@
         <input type="radio" name="stats_tabs" class="tab h-14" aria-label="Chart" checked />
         {#key workout?._id}
             <div class="tab-content p-6" in:fade>
-                {workout?._id}
+                <Chart {workout} />
             </div>
         {/key}
 
