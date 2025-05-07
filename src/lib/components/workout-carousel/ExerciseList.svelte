@@ -25,11 +25,6 @@
     <ul class="list bg-base-100 rounded-box shadow-sm min-h-100 max-h-100 overflow-y-auto">
         <li class="p-4 tracking-wide flex items-center">
             <span class="text-sm opacity-60">Exercises</span>
-            <div class="tooltip tooltip-left ml-auto" data-tip="Add new exercise">
-                <button class="btn btn-square btn-xs" onclick={() => exerciseEditor.editNew(exercises)}>
-                    <Icon type="Add" classes="size-4" />
-                </button>
-            </div>
         </li>
 
         {#each exercises as exercise, idx (exercise._id)}
@@ -81,6 +76,7 @@
             {title: "Remove", icon: "Remove", item: exercise, action: (item: any) => {
                 deleteConfirmation.show(`Remove "${item.name}"?`, () => exerciseEditor.remove(item, exercises))
             }},
+            {title: "Add new", icon: "Add", item: exercise, action: (item: any) => exerciseEditor.editNew(exercises)},
         ]}/>
 
         <div class="flex flex-col ml-2">

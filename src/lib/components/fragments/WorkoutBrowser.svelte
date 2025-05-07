@@ -11,7 +11,7 @@
     let currentIdx = $state(index)
 </script>
 
-<div class="xl:grid grid-cols-2 gap-3">
+<div class="mt-4 xl:grid grid-cols-2 gap-3">
     <WorkoutCarousel bind:currentIdx />
     <WorkoutStats workout={workoutStore.list[currentIdx]} />
 </div>

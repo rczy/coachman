@@ -3,7 +3,6 @@ import type { PageLoad } from "./$types"
 import { workoutStore } from "$lib/state.svelte"
 
 export const load: PageLoad = ({params}) => {
-    console.log(params)
     if (!params.id) {
         return { index: 0 }
     }

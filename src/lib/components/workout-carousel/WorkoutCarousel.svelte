@@ -4,7 +4,6 @@
     import { workoutEditor } from "$lib/editor.svelte"
     import { workoutStore } from '$lib/state.svelte';
     import type { Workout } from "$lib/types"
-    import Icon from '../Icon.svelte';
     import DotsMenu from '../DotsMenu.svelte';
     import ExerciseList from './ExerciseList.svelte';
     import { appEvents } from '$lib/app-events';
@@ -15,7 +14,6 @@
     }
     let { currentIdx = $bindable() }: Props = $props()
 
-    let carouselProgress = $state(0);
     let disablePrev = $state(true);
     let disableNext = $state(true);
     let listLength = $derived(workoutStore.list.length)
@@ -33,27 +31,24 @@
         emblaApi
             .on('init', applyProgress)
             .on('reInit', applyProgress)
-            .on('scroll', applyProgress)
             .on('slideFocus', applyProgress)
+            .on('scroll', () => {
+                applyProgress()
+                currentIdx = emblaApi?.selectedScrollSnap()
+            })
             .on('slidesChanged', () => {
                 if (scrollToEnd) {
                     emblaApi?.scrollTo(listLength - 1);
                     scrollToEnd = false;
                 }
-                refreshCurrentIdx()
             });
         emblaApi.scrollTo(currentIdx)
         applyProgress();
     }
 
     const applyProgress = () => {
-        carouselProgress = Math.max(0, Math.min(1, emblaApi.scrollProgress())) * 100;
         disablePrev = !emblaApi.canScrollPrev();
         disableNext = !emblaApi.canScrollNext();
-    }
-
-    const refreshCurrentIdx = () => {
-        currentIdx = emblaApi?.selectedScrollSnap()
     }
 
     $effect(() => {
@@ -67,8 +62,6 @@
 </script>
 
 <div>
-    {@render controls()}
-
     <div class="embla overflow-hidden pb-3 px-3" use:emblaCarouselSvelte="{{ options, plugins }}" {onemblaInit}>
         <div class="embla__container flex gap-5">
             {#if listLength}
@@ -83,28 +76,26 @@
         </div>
     </div>
 
+    {@render controls()}
+
     <Confirmation bind:this={deleteConfirmation} />
 </div>
 
 {#snippet controls()}
-    {#if listLength}
-        <div class="px-3 my-3 flex flex-1 items-center gap-2">
-            {#if listLength > 1}
-                <button class="btn" onclick="{() => { emblaApi?.scrollPrev(); refreshCurrentIdx() }}" disabled="{disablePrev}">❮</button>
-                <progress class="progress progress-neutral basis-1/4 opacity-10" value="{carouselProgress.toFixed(2)}" max="100"></progress>
-                <button class="btn" onclick="{() => { emblaApi?.scrollNext(); refreshCurrentIdx() }}" disabled="{disableNext}">❯</button>
-            {/if}
-            <div class="tooltip tooltip-left ml-auto" data-tip="Add new workout">
-                <button class="btn btn-square" onclick={() => workoutEditor.editNew(workoutStore.list)}>
-                    <Icon type="Add"/>
-                </button>
+    <div class="flex justify-between px-3">
+        {#if listLength > 1}
+            <div class="flex gap-2">
+                <button class="btn" onclick="{() => emblaApi?.scrollPrev()}" disabled="{disablePrev}">❮</button>
+                <button class="btn" onclick="{() => emblaApi?.scrollNext()}" disabled="{disableNext}">❯</button>
             </div>
-        </div>
-    {:else}
-        <div class="px-3 my-3 flex flex-1">
-            <span class="size-10"></span>
-        </div>
-    {/if}
+            <div class="flex items-center gap-1">
+                {#each workoutStore.list as _, idx}
+                    <!-- svelte-ignore a11y_consider_explicit_label -->
+                    <button class={["btn size-4 btn-circle shadow-sm", {'btn-soft': idx === currentIdx}]} onclick={() => emblaApi?.scrollTo(idx)}>&nbsp;</button>
+                {/each}
+            </div>
+        {/if}
+    </div>
 {/snippet}
 
 {#snippet workoutCard(workout: Workout)}
@@ -119,6 +110,7 @@
                     {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
                         deleteConfirmation.show(`Remove "${item.name}"?`, () => workoutEditor.remove(item, workoutStore.list))
                     }},
+                    {title: "Add new", icon: "Add", item: workout, action: (item: any) => workoutEditor.editNew(workoutStore.list)},
                 ]}/>
             </h2>
 
@@ -137,7 +129,6 @@
     {:else}
         <button class="btn btn-accent btn-block sm:basis-1/2" disabled>Let's do it!</button>
     {/if}
-    <button class="btn btn-ghost"onclick={() => console.log($state.snapshot(workout))}>Data dump</button>
 {/snippet}
 
 {#snippet noWorkout()}
