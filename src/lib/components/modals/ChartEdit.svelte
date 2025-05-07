@@ -1,5 +1,6 @@
 <script lang="ts">
     import { appEvents } from "$lib/app-events";
+    import { persistence } from "$lib/peristence";
     import type { Exercise, Metric, Workout } from "$lib/types";
     import Modal from "../Modal.svelte";
 
@@ -17,6 +18,7 @@
                 workout.exercises[i].metrics[j].marked = metric.marked
             })
         })
+        persistence.updateWorkout(workout._id, {exercises: $state.snapshot(workout.exercises)})
         cancel()
     }
 

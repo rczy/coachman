@@ -3,8 +3,14 @@
     import { fade } from 'svelte/transition';
     import NavBar from '$lib/components/fragments/NavBar.svelte';
     import Footer from '$lib/components/fragments/Footer.svelte';
+    import { workoutStore } from '$lib/state.svelte';
+    import { browser } from '$app/environment';
 
     let { data, children } = $props();
+
+    if (browser) {
+        workoutStore.load()    
+    }
 </script>
 
 <NavBar />

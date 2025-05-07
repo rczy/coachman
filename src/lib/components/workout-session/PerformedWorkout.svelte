@@ -7,6 +7,7 @@
     import MetricAdjust from "../modals/MetricAdjust.svelte";
     import Confetti from 'svelte-confetti'
     import { getDataURLs } from "$lib/confetti-emojis";
+    import { persistence } from "$lib/peristence";
 
     interface Props {
         workout: Workout
@@ -50,6 +51,7 @@
         <button class="btn btn-success w-60 mt-7"
             onclick={() => {
                 workout.sessions.push(workoutSession)
+                persistence.updateWorkout(workout._id, {sessions: $state.snapshot(workout.sessions)})
                 goto(`/${workout._id}`)
             }}
         >

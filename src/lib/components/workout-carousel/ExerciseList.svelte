@@ -1,23 +1,30 @@
 <script lang="ts">
     import { exerciseEditor } from "$lib/editor.svelte";
-    import type { Exercise } from "$lib/types";
+    import type { Exercise, Workout } from "$lib/types";
     import { linkify } from "$lib/utils";
     import DotsMenu from "../DotsMenu.svelte";
     import Icon from "../Icon.svelte";
     import { flip } from "svelte/animate";
     import Confirmation from '../modals/Confirmation.svelte';
+    import { persistence } from "$lib/peristence";
 
     interface Props {
         exercises: Exercise[]
+        workout: Workout
     }
-    let {exercises = $bindable()}: Props = $props();
+    let {exercises = $bindable(), workout}: Props = $props();
 
     let listLength = $derived(exercises.length)
 
     let deleteConfirmation: Confirmation
 
-    function swap(idx: number, offset: number) {
+    const swap = (idx: number, offset: number) => {
         [exercises[idx], exercises[idx + offset]] = [exercises[idx + offset], exercises[idx]];
+        updateWorkout()
+    }
+
+    const updateWorkout = () => {
+        persistence.updateWorkout(workout._id, {exercises: $state.snapshot(exercises)})
     }
 </script>
 
@@ -36,7 +43,7 @@
 {:else}
     <div class="bg-base-100 rounded-box shadow-sm min-h-100 max-h-100 flex flex-col items-center justify-center">
         <span class="my-6">No exercises yet.</span>
-        <button class="btn btn-accent" onclick={() => exerciseEditor.editNew(exercises)}>
+        <button class="btn btn-accent" onclick={() => exerciseEditor.editNew(exercises, () => updateWorkout())}>
             Add an exercise
         </button>
     </div>
@@ -71,12 +78,22 @@
 
     <div class="flex items-center">
         <DotsMenu classes={"dropdown-end"} options={[
-            {title: "Edit", icon: "Edit", item: exercise, action: (item: any) => exerciseEditor.edit($state.snapshot(item), exercises)},
-            {title: "Clone", icon: "Clone", item: exercise, action: (item: any) => exerciseEditor.clone($state.snapshot(item), exercises)},
-            {title: "Remove", icon: "Remove", item: exercise, action: (item: any) => {
-                deleteConfirmation.show(`Remove "${item.name}"?`, () => exerciseEditor.remove(item, exercises))
+            {title: "Edit", icon: "Edit", item: exercise, action: (item: any) => 
+                exerciseEditor.edit($state.snapshot(item), exercises, () => updateWorkout())
+            },
+            {title: "Clone", icon: "Clone", item: exercise, action: (item: any) => {
+                exerciseEditor.clone($state.snapshot(item), exercises)
+                updateWorkout()
             }},
-            {title: "Add new", icon: "Add", item: exercise, action: (item: any) => exerciseEditor.editNew(exercises)},
+            {title: "Remove", icon: "Remove", item: exercise, action: (item: any) => {
+                deleteConfirmation.show(`Remove "${item.name}"?`, () => {
+                    exerciseEditor.remove(item, exercises)
+                    updateWorkout()
+                })
+            }},
+            {title: "Add new", icon: "Add", item: exercise, action: (item: any) =>
+                exerciseEditor.editNew(exercises, () => updateWorkout())
+            },
         ]}/>
 
         <div class="flex flex-col ml-2">

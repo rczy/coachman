@@ -3,6 +3,7 @@ import type { Exercise, Metric, Workout } from "./types";
 abstract class Editor<T extends {_id: string}> {
     subject: T = $state({} as T)
     protected container: T[] = []
+    protected onsubmit: (saved: T) => void = (saved: T) => {}
     protected active: boolean = $state(false);
 
     protected abstract getEmptySubject(): T;
@@ -15,14 +16,17 @@ abstract class Editor<T extends {_id: string}> {
         return this.active
     }
 
-    editNew(container: T[] = []) {
-        this.edit(this.getEmptySubject(), container)
+    editNew(container: T[] = [], onsubmit?: (saved: T) => void) {
+        this.edit(this.getEmptySubject(), container, onsubmit)
     }
 
-    edit(subject: T, container: T[] = []) {
+    edit(subject: T, container: T[] = [], onsubmit?: (saved: T) => void) {
         this.active = true
         this.subject = structuredClone(subject)
         this.container = container
+        if (onsubmit) {
+            this.onsubmit = onsubmit
+        }
     }
 
     cancel() {
@@ -33,7 +37,9 @@ abstract class Editor<T extends {_id: string}> {
         if (!this.active) {
             return
         }
-        this.save()
+        this.onsubmit(
+            this.save()
+        )
         this.cancel()
     }
 
@@ -51,7 +57,7 @@ abstract class Editor<T extends {_id: string}> {
         }
     }
 
-    protected save() {
+    protected save(): T {
         const snapshot = $state.snapshot(this.subject) as T
         if (this.isSubjectNew()) {
             snapshot._id = crypto.randomUUID()
@@ -62,6 +68,7 @@ abstract class Editor<T extends {_id: string}> {
                 this.container[idx] = snapshot
             }
         }
+        return snapshot
     }
 }
 

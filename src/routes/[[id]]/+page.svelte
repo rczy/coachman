@@ -10,11 +10,12 @@
     let { data }: PageProps = $props()
 
     let currentIdx = $state(data.index)
+    let currentWorkout = $derived(workoutStore.list[currentIdx])
 </script>
 
 <div class="md:mt-12 xl:grid grid-cols-2 gap-5">
     <WorkoutCarousel bind:currentIdx />
-    <WorkoutStats workout={workoutStore.list[currentIdx]} />
+    <WorkoutStats workout={currentWorkout} />
 </div>
 
 <WorkoutEdit />

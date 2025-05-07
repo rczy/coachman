@@ -8,6 +8,7 @@
     import ExerciseList from './ExerciseList.svelte';
     import { appEvents } from '$lib/app-events';
     import Confirmation from '../modals/Confirmation.svelte';
+    import { persistence } from '$lib/peristence';
 
     interface Props {
         currentIdx: number
@@ -89,9 +90,14 @@
                 <button class="btn" onclick="{() => emblaApi?.scrollNext()}" disabled="{disableNext}">❯</button>
             </div>
             <div class="flex items-center gap-1">
-                {#each workoutStore.list as _, idx}
+                {#each workoutStore.list as workout, idx}
                     <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class={["btn size-4 btn-circle shadow-sm", {'btn-soft': idx === currentIdx}]} onclick={() => emblaApi?.scrollTo(idx)}>&nbsp;</button>
+                    <button class={["btn size-4 btn-circle shadow-sm tooltip", {'btn-soft': idx === currentIdx}]}
+                        onclick={() => emblaApi?.scrollTo(idx)}
+                        data-tip="{workout.name}"
+                    >
+                        &nbsp;
+                    </button>
                 {/each}
             </div>
         {/if}
@@ -103,24 +109,43 @@
         <div class="card-body">
             <h2 class="card-title mb-2">
                 {workout.name}
-
-                <DotsMenu options={[
-                    {title: "Edit", icon: "Edit", item: workout, action: (item: any) => workoutEditor.edit($state.snapshot(item), workoutStore.list)},
-                    {title: "Chart", icon: "Chart", item: workout, action: (item: any) => appEvents.emit('DatasetEdit', {workout: item})},
-                    {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
-                        deleteConfirmation.show(`Remove "${item.name}"?`, () => workoutEditor.remove(item, workoutStore.list))
-                    }},
-                    {title: "Add new", icon: "Add", item: workout, action: (item: any) => workoutEditor.editNew(workoutStore.list)},
-                ]}/>
+                {@render dotsMenu(workout)}
             </h2>
 
-            <ExerciseList bind:exercises={workout.exercises}/>
+            <ExerciseList bind:exercises={workout.exercises} {workout}/>
 
             <div class="card-actions justify-center mt-4">
                 {@render doIt(workout)}
             </div>
         </div>
     </div>
+{/snippet}
+
+{#snippet dotsMenu(workout: Workout)}
+    <DotsMenu options={[
+        {title: "Edit", icon: "Edit", item: workout, action: (item: any) => 
+            workoutEditor.edit(
+                $state.snapshot(item),
+                workoutStore.list,
+                (saved) => persistence.updateWorkout(saved._id, saved)
+            )
+        },
+        {title: "Chart", icon: "Chart", item: workout, action: (item: any) => 
+            appEvents.emit('DatasetEdit', {workout: item})
+        },
+        {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
+            deleteConfirmation.show(`Remove "${item.name}"?`, () => {
+                workoutEditor.remove(item, workoutStore.list)
+                persistence.deleteWorkout(item._id)
+            })
+        }},
+        {title: "Add new", icon: "Add", item: workout, action: (item: any) => 
+            workoutEditor.editNew(
+                workoutStore.list,
+                (saved) => persistence.addWorkout(saved)
+            )
+        },
+    ]}/>
 {/snippet}
 
 {#snippet doIt(workout: Workout)}
@@ -137,7 +162,7 @@
             <div class="card-title mb-2 size-10"></div>
             <div class="min-h-100 max-h-100 flex flex-col items-center justify-center">
                 <span class="my-6">No workouts yet.</span>
-                <button class="btn btn-accent" onclick={() => workoutEditor.editNew(workoutStore.list)}>
+                <button class="btn btn-accent" onclick={() => workoutEditor.editNew(workoutStore.list, (saved) => persistence.addWorkout(saved))}>
                     Add a workout
                 </button>
             </div>
