@@ -18,7 +18,7 @@
         <div class="navbar-center flex flex-col items-center z-10">
             <button class="btn btn-ghost text-xl" {onclick}>Coachman</button>
             {#each confetti as _}
-                <Confetti x={[-1, 1]} y={[-1, -1]} colorArray={getDataURLs()} size={60} amount={1} {duration} />
+                <Confetti x={[-1, 1]} y={[0, -1]} delay={[0, 250]} colorArray={getDataURLs()} size={60} amount={1} {duration} />
             {/each}
         </div>
     <div class="navbar-end"></div>

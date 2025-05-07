@@ -1,7 +1,7 @@
 # Coachman
 
 ## TODO:
-- use PouchDb or other wrapper for IndexedDB
+- fix workout list sort order loaded from DB
 - import/export
 - splash screen
 - (mobile build; capacitor?)
