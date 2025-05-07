@@ -18,7 +18,7 @@
     }
 </script>
 
-<div class="md:h-130 overflow-auto">
+<div class="h-130 overflow-auto">
     {@render table()}
 </div>
 

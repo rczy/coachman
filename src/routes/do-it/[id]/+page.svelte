@@ -48,9 +48,7 @@
     }
 </script>
 
-<h1 class="text-2xl font-bold mb-8">Gym</h1>
-
-<div class="lg:grid grid-cols-3">
+<div class="mt-8 lg:grid grid-cols-3">
     {@render aside()}
 
     {#if inProgress}

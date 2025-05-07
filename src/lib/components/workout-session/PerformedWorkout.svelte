@@ -5,6 +5,8 @@
     import { goto } from "$app/navigation";
     import { metricEditor } from "$lib/editor.svelte";
     import MetricAdjust from "../modals/MetricAdjust.svelte";
+    import Confetti from 'svelte-confetti'
+    import { getDataURLs } from "$lib/confetti-emojis";
 
     interface Props {
         workout: Workout
@@ -26,9 +28,14 @@
 
 <div in:fly={{x: 50}}>
     {#if workoutSession.performedExercises.length}
-        <p class="leading-8">
-            <span class="font-semibold">Great job!</span><br>You have completed the exercises, get some rest.
-        </p>
+        <div class="flex flex-col">
+            <p class="leading-8">
+                <span class="font-semibold">Great job!</span><br>You have completed the exercises, get some rest.
+            </p>
+            <div class="self-center">
+                <Confetti x={[-2, 2]} y={[-1, 0.5]} xSpread={0.3} delay={[0, 250]} destroyOnComplete duration={3000} size={50} colorArray={getDataURLs()} />
+            </div>
+        </div>
     {/if}
 
     <ul class="list mt-7">
