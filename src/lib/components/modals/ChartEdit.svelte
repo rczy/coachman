@@ -57,7 +57,7 @@
         <li class="list-row">
             <div>
                 <div>{exercise.name}</div>
-                <div class="flex flex-row gap-4 mt-2">
+                <div class="flex flex-row gap-4 mt-2 flex-wrap">
                     {@render metrics(exercise.metrics)}
                 </div>
             </div>

@@ -134,7 +134,7 @@
             <div class="flex items-center gap-1">
                 {#each workoutStore.list as workout, idx}
                     <!-- svelte-ignore a11y_consider_explicit_label -->
-                    <button class={["btn size-4 btn-circle shadow-sm tooltip", {'btn-soft': idx === currentIdx}]}
+                    <button class={["btn size-4 btn-circle shadow-sm xl:tooltip", {'btn-soft': idx === currentIdx}]}
                         onclick={() => emblaApi?.scrollTo(idx)}
                         data-tip="{workout.name}"
                     >

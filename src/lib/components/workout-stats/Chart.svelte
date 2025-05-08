@@ -71,7 +71,10 @@
             type: 'line',
             data: {
                 datasets: datasets
-            }
+            },
+            options: {
+                maintainAspectRatio: false,
+            },
         })
         return () => {
             chart.destroy()
@@ -79,7 +82,7 @@
     })
 </script>
 
-<div class={{hidden: emptyDataset}}>
+<div class={['min-h-80', {hidden: emptyDataset}]}>
     <canvas bind:this={ctx}></canvas>
 </div>
 
