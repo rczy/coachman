@@ -5,12 +5,12 @@
     interface Option {
         title: string
         icon?: IconType
-        action: (item: any) => void
-        item: any
+        action: () => void
+        disabled?: boolean
     }
 
     interface Props {
-        options: Option[]
+        options: (Option | null)[]
         classes?: string | string[]
     }
     let {options, classes = []}: Props = $props()
@@ -24,17 +24,21 @@
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
         {#each options as option}
-            <li>
-                <button onclick={(e) => {
-                    option.action(option.item)
-                    e.currentTarget.blur()
-                }}>
-                    {#if option.icon}
-                        <Icon type={option.icon}/>
-                    {/if}
-                    {option.title}
-                </button>
-            </li>
+            {#if option === null}
+                <div class="divider my-0"></div>
+            {:else}
+                <li class={{'menu-disabled': option?.disabled}}>
+                    <button onclick={(e) => {
+                        option.action()
+                        e.currentTarget.blur()
+                    }}>
+                        {#if option.icon}
+                            <Icon type={option.icon}/>
+                        {/if}
+                        {option.title}
+                    </button>
+                </li>
+            {/if}
         {/each}
     </ul>
 </div>

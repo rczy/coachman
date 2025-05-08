@@ -1,5 +1,5 @@
 <script lang="ts">
-    export type IconType = 'Add' | 'Edit' | 'Clone' | 'Remove' | 'More' | 'Up' | 'Down' | 'Check' | 'Chart'
+    export type IconType = 'Add' | 'Edit' | 'Clone' | 'Remove' | 'More' | 'Up' | 'Down' | 'Left' | 'Right' | 'Check' | 'Chart' | 'Archive'
 
     interface Props {
         type: IconType
@@ -23,10 +23,16 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
     {:else if type == 'Down'}
         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+    {:else if type == 'Left'}
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />      
+    {:else if type == 'Right'}
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
     {:else if type == 'Check'}
         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
     {:else if type == 'Chart'}
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />      
+    {:else if type == 'Archive'}
+        <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
     {:else}
         <title>Unknown icon type: {type}</title>
     {/if}

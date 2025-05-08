@@ -10,7 +10,7 @@ class WorkoutStore {
             console.log("load")
             await db.workouts.bulkAdd(getMockWorkouts(3))
         }
-        this.list = await db.workouts.toArray()
+        this.list = (await db.workouts.toArray()).sort((a, b) => a.order - b.order)
     }
 }
 export const workoutStore = new WorkoutStore()

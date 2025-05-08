@@ -52,6 +52,48 @@
         disableNext = !emblaApi.canScrollNext();
     }
 
+    const swap = (workout: Workout, direction: (-1 | 1)) => {
+        const arr = workoutStore.list
+        const idx = workout.order
+        const neighbour = arr[idx + direction];
+        [arr[idx], arr[idx + direction]] = [arr[idx + direction], arr[idx]]
+        workout.order = idx + direction
+        persistence.updateWorkout(workout._id, {order: workout.order})
+        neighbour.order = idx
+        persistence.updateWorkout(neighbour._id, {order: neighbour.order})
+    }
+
+    const addNew = () => {
+        workoutEditor.editNew(
+            workoutStore.list,
+            (saved) => {
+                const idx = workoutStore.list.findIndex(el => el._id === saved._id)
+                workoutStore.list[idx].order = idx
+                persistence.addWorkout($state.snapshot(workoutStore.list[idx]))
+            }
+        )
+    }
+
+    const edit = (workout: Workout) => {
+        workoutEditor.edit(
+            $state.snapshot(workout),
+            workoutStore.list,
+            (saved) => persistence.updateWorkout(saved._id, saved)
+        )
+    }
+
+    const remove = (workout: Workout) => {
+        deleteConfirmation.show(`Remove "${workout.name}"?`, () => {
+            workoutEditor.remove(workout, workoutStore.list)
+            persistence.deleteWorkout(workout._id)
+            for (const el of workoutStore.list) {
+                if (el.order < workout.order) continue
+                el.order -= 1
+                persistence.updateWorkout(el._id, {order: el.order})
+            }
+        })
+    }
+
     $effect(() => {
         const unsubscribe = appEvents.listen('WorkoutAdded', () => {
             scrollToEnd = true
@@ -123,27 +165,30 @@
 
 {#snippet dotsMenu(workout: Workout)}
     <DotsMenu options={[
-        {title: "Edit", icon: "Edit", item: workout, action: (item: any) => 
-            workoutEditor.edit(
-                $state.snapshot(item),
-                workoutStore.list,
-                (saved) => persistence.updateWorkout(saved._id, saved)
-            )
+        {title: "Edit", icon: "Edit", action: () => 
+            edit(workout)
         },
-        {title: "Chart", icon: "Chart", item: workout, action: (item: any) => 
-            appEvents.emit('DatasetEdit', {workout: item})
+        {title: "Chart", icon: "Chart", action: () => 
+            appEvents.emit('DatasetEdit', {workout})
         },
-        {title: "Remove", icon: "Remove", item: workout, action: (item: any) => {
-            deleteConfirmation.show(`Remove "${item.name}"?`, () => {
-                workoutEditor.remove(item, workoutStore.list)
-                persistence.deleteWorkout(item._id)
-            })
+        {title: "Remove", icon: "Remove", action: () =>
+            remove(workout)
+        },
+        null,
+        {title: "Move left", icon: "Left",
+            disabled: workout.order === 0,
+            action: () => { swap(workout, -1); emblaApi?.scrollPrev() }
+        },
+        {title: "Move right", icon: "Right",
+            disabled: workout.order === workoutStore.list.length - 1,
+            action: () => { swap(workout, 1); emblaApi?.scrollNext() }
+        },
+        null,
+        {title: "Import / export", icon: "Archive", action: () => {
+
         }},
-        {title: "Add new", icon: "Add", item: workout, action: (item: any) => 
-            workoutEditor.editNew(
-                workoutStore.list,
-                (saved) => persistence.addWorkout(saved)
-            )
+        {title: "Add new", icon: "Add", action: () => 
+            addNew()
         },
     ]}/>
 {/snippet}
@@ -162,7 +207,7 @@
             <div class="card-title mb-2 size-10"></div>
             <div class="min-h-100 max-h-100 flex flex-col items-center justify-center">
                 <span class="my-6">No workouts yet.</span>
-                <button class="btn btn-accent" onclick={() => workoutEditor.editNew(workoutStore.list, (saved) => persistence.addWorkout(saved))}>
+                <button class="btn btn-accent" onclick={() => addNew()}>
                     Add a workout
                 </button>
             </div>

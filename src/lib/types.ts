@@ -32,6 +32,7 @@ export interface WorkoutSession {
 
 export interface Workout {
     _id: string
+    order: number
     name: string
     exercises: Exercise[]
     sessions: WorkoutSession[]

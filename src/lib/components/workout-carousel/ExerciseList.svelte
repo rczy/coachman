@@ -78,20 +78,21 @@
 
     <div class="flex items-center">
         <DotsMenu classes={"dropdown-end"} options={[
-            {title: "Edit", icon: "Edit", item: exercise, action: (item: any) => 
-                exerciseEditor.edit($state.snapshot(item), exercises, () => updateWorkout())
+            {title: "Edit", icon: "Edit", action: () => 
+                exerciseEditor.edit($state.snapshot(exercise), exercises, () => updateWorkout())
             },
-            {title: "Clone", icon: "Clone", item: exercise, action: (item: any) => {
-                exerciseEditor.clone($state.snapshot(item), exercises)
+            {title: "Clone", icon: "Clone", action: () => {
+                exerciseEditor.clone($state.snapshot(exercise), exercises)
                 updateWorkout()
             }},
-            {title: "Remove", icon: "Remove", item: exercise, action: (item: any) => {
-                deleteConfirmation.show(`Remove "${item.name}"?`, () => {
-                    exerciseEditor.remove(item, exercises)
+            {title: "Remove", icon: "Remove", action: () => {
+                deleteConfirmation.show(`Remove "${exercise.name}"?`, () => {
+                    exerciseEditor.remove(exercise, exercises)
                     updateWorkout()
                 })
             }},
-            {title: "Add new", icon: "Add", item: exercise, action: (item: any) =>
+            null,
+            {title: "Add new", icon: "Add", action: () =>
                 exerciseEditor.editNew(exercises, () => updateWorkout())
             },
         ]}/>

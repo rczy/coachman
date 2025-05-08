@@ -3,7 +3,7 @@ import type { Exercise, Metric, Workout } from "./types";
 abstract class Editor<T extends {_id: string}> {
     subject: T = $state({} as T)
     protected container: T[] = []
-    protected onsubmit: (saved: T) => void = (saved: T) => {}
+    protected onsubmit: (saved: T) => void = () => {}
     protected active: boolean = $state(false);
 
     protected abstract getEmptySubject(): T;
@@ -76,6 +76,7 @@ class WorkoutEditor extends Editor<Workout> {
     protected getEmptySubject(): Workout {
         return {
             _id: '',
+            order: Infinity,
             name: '',
             exercises: [],
             sessions: [],
