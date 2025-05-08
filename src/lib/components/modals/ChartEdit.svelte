@@ -34,7 +34,7 @@
     })
 </script>
 
-<Modal {show} title="Configuring dataset">
+<Modal {show} onclose={() => cancel()} title="Configuring dataset">
 
     {#if exercises?.length}
         <ul class="list">

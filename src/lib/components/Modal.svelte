@@ -6,11 +6,12 @@
         closable?: boolean
         title?: string
         action?: Snippet
+        onclose?: () => void
         children?: Snippet
     }
-    let { show = $bindable(), closable = false, title, action, children }: Props = $props()
+    let { show = $bindable(), closable = false, title, action, onclose, children }: Props = $props()
 
-    let modal: any;
+    let modal: HTMLDialogElement;
 
     $effect(() => {
         if (show) modal.showModal()
@@ -20,7 +21,8 @@
 
 <dialog
     bind:this={modal}
-    onclose={() => (show = false)}
+    onclose={() => onclose?.()}
+    oncancel={() => onclose?.()}
     class="modal"
 >
     <div class="modal-box">

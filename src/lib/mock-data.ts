@@ -3,18 +3,19 @@ import type { Exercise, Metric, Workout } from "./types";
 export const getMockWorkouts = (count: number): Workout[] => {
     const workouts = []
     for (let i = 0; i < count; i++) {
-        workouts.push(getMockWorkout())
+        workouts.push(getMockWorkout(i))
     }
     return workouts
 }
 
-const getMockWorkout = (): Workout => {
+const getMockWorkout = (order: number): Workout => {
     const exercises = []
     for (let i = 0; i < getRandomInt(3) + 1; i++) {
         exercises.push(getMockExercise())
     }
     return {
         _id: crypto.randomUUID(),
+        order: order,
         name: `Awesome workout #${getRandomInt(100)}`,
         exercises: exercises,
         sessions: [],

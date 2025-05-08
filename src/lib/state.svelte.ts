@@ -7,7 +7,6 @@ class WorkoutStore {
 
     async load() {
         if (await db.workouts.count() == 0) {
-            console.log("load")
             await db.workouts.bulkAdd(getMockWorkouts(3))
         }
         this.list = (await db.workouts.toArray()).sort((a, b) => a.order - b.order)

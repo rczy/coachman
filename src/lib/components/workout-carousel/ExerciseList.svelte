@@ -11,12 +11,11 @@
     interface Props {
         exercises: Exercise[]
         workout: Workout
+        deleteConfirmation: Confirmation
     }
-    let {exercises = $bindable(), workout}: Props = $props();
+    let {exercises = $bindable(), workout, deleteConfirmation}: Props = $props();
 
     let listLength = $derived(exercises.length)
-
-    let deleteConfirmation: Confirmation
 
     const swap = (idx: number, offset: number) => {
         [exercises[idx], exercises[idx + offset]] = [exercises[idx + offset], exercises[idx]];
@@ -48,8 +47,6 @@
         </button>
     </div>
 {/if}
-
-<Confirmation bind:this={deleteConfirmation} />
 
 {#snippet exerciseCard(exercise: Exercise, idx: number, isFirst: boolean, isLast: boolean)}
 <li class="list-row">

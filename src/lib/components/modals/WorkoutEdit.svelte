@@ -5,9 +5,15 @@
 
     let show = $derived.by(() => workoutEditor.isActive())
     let title = $derived.by(() => workoutEditor.isSubjectNew() ? "Adding new workout" : "Editing workout")
+
+    const save = () => {
+        workoutEditor.submit()
+        appEvents.emit('WorkoutAdded')
+    }
+    const cancel = () => workoutEditor.cancel()
 </script>
 
-<Modal {show} {title}>
+<Modal {show} {title} onclose={() => cancel()}>
     <div class="flex justify-center">
         <fieldset class="fieldset w-80">
             <!-- svelte-ignore a11y_label_has_associated_control -->
@@ -17,7 +23,7 @@
     </div>
 
     {#snippet action()}
-        <button class="btn btn-ghost" onclick={() => workoutEditor.cancel()}>Cancel</button>
-        <button class="btn btn-success" onclick={() => { workoutEditor.submit(); appEvents.emit('WorkoutAdded') }} disabled={!workoutEditor.subject.name}>{workoutEditor.isSubjectNew() ? "Add" : "Done"}</button>
+        <button class="btn btn-ghost" onclick={() => cancel()}>Cancel</button>
+        <button class="btn btn-success" onclick={() => save()} disabled={!workoutEditor.subject.name}>{workoutEditor.isSubjectNew() ? "Add" : "Done"}</button>
     {/snippet}
 </Modal>

@@ -36,7 +36,7 @@
     })
 </script>
 
-<Modal {show} {title}>
+<Modal {show} {title} onclose={() => cancel()}>
     <div class="flex justify-center">
         <!-- svelte-ignore a11y_label_has_associated_control -->
         <fieldset class="fieldset w-80">

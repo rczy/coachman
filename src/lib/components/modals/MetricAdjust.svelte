@@ -11,19 +11,22 @@
 
     let show = $derived.by(() => metricEditor.isActive())
 
+    const save = () => metricEditor.submit()
+    const cancel = () => metricEditor.cancel()
+
     $effect(() => {
         if (goal.value == undefined || metricEditor.subject.value == undefined) return
         metricEditor.subject.trend = Math.sign(metricEditor.subject.value - goal.value) as Trend
     })
 </script>
 
-<Modal {show} title="Adjusting metric">
+<Modal {show} onclose={() => cancel()} title="Adjusting metric">
     <div class="flex justify-center">
         <MetricInput {goal} bind:result={metricEditor.subject.value}/>
     </div>
 
     {#snippet action()}
-        <button class="btn btn-ghost" onclick={() => metricEditor.cancel()}>Cancel</button>
-        <button class="btn btn-success" onclick={() => metricEditor.submit()} disabled={!metricEditor.subject.value}>Done</button>
+        <button class="btn btn-ghost" onclick={() => cancel()}>Cancel</button>
+        <button class="btn btn-success" onclick={() => save()} disabled={!metricEditor.subject.value}>Done</button>
     {/snippet}
 </Modal>

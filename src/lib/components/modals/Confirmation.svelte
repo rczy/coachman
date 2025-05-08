@@ -21,7 +21,7 @@
     }
 </script>
 
-<Modal show={visible} title="Confirmation">
+<Modal show={visible} onclose={() => cancel()} title="Confirmation">
     
     {modalText}
 

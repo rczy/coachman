@@ -154,7 +154,7 @@
                 {@render dotsMenu(workout)}
             </h2>
 
-            <ExerciseList bind:exercises={workout.exercises} {workout}/>
+            <ExerciseList bind:exercises={workout.exercises} {workout} {deleteConfirmation}/>
 
             <div class="card-actions justify-center mt-4">
                 {@render doIt(workout)}
