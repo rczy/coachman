@@ -6,6 +6,7 @@
     import WorkoutCarousel from "$lib/components/workout-carousel/WorkoutCarousel.svelte";
     import WorkoutStats from "$lib/components/workout-stats/WorkoutStats.svelte";
     import type { PageProps } from "./$types";
+    import ImportExport from "$lib/components/modals/ImportExport.svelte";
 
     let { data }: PageProps = $props()
 
@@ -21,3 +22,4 @@
 <WorkoutEdit />
 <ExerciseEdit />
 <ChartEdit />
+<ImportExport />

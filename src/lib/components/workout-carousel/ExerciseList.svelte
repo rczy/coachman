@@ -41,7 +41,6 @@
     </ul>
 {:else}
     <div class="bg-base-100 rounded-box shadow-sm min-h-100 max-h-100 flex flex-col items-center justify-center">
-        <span class="my-6">No exercises yet.</span>
         <button class="btn btn-accent" onclick={() => exerciseEditor.editNew(exercises, () => updateWorkout())}>
             Add an exercise
         </button>

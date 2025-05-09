@@ -149,7 +149,7 @@
 {#snippet workoutCard(workout: Workout)}
     <div class="card bg-base-200 shadow-md">
         <div class="card-body">
-            <h2 class="card-title mb-2">
+            <h2 class="card-title mb-2 justify-between">
                 {workout.name}
                 {@render dotsMenu(workout)}
             </h2>
@@ -164,7 +164,7 @@
 {/snippet}
 
 {#snippet dotsMenu(workout: Workout)}
-    <DotsMenu options={[
+    <DotsMenu classes={"dropdown-end"} options={[
         {title: "Edit", icon: "Edit", action: () => 
             edit(workout)
         },
@@ -185,7 +185,7 @@
         },
         null,
         {title: "Import / export", icon: "Archive", action: () => {
-
+            appEvents.emit('ShowArchiving')
         }},
         {title: "Add new", icon: "Add", action: () => 
             addNew()
@@ -205,11 +205,12 @@
     <div class="card bg-base-200 shadow-md flex-[0_0_100%] min-w-0">
         <div class="card-body">
             <div class="card-title mb-2 size-10"></div>
-            <div class="min-h-100 max-h-100 flex flex-col items-center justify-center">
-                <span class="my-6">No workouts yet.</span>
+            <div class="min-h-100 max-h-100 flex flex-col items-center justify-center gap-5">
                 <button class="btn btn-accent" onclick={() => addNew()}>
                     Add a workout
                 </button>
+                <span>OR</span>
+                <button class="btn" onclick={() => appEvents.emit('ShowArchiving')}>Import</button>
             </div>
             <div class="card-actions justify-center mt-4 size-10"></div>
         </div>

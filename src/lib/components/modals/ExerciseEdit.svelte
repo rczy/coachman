@@ -76,7 +76,7 @@
         <input class="input join-item" type="number" placeholder="Goal" bind:value={metricEditor.subject.value}/>
         <input class="input join-item" placeholder="Unit" bind:value={metricEditor.subject.unit}/>
 
-        <button class="btn tooltip"
+        <button class="btn join-item tooltip"
             onclick={() => metricEditor.subject.trend *= -1}
             data-tip={metricEditor.subject.trend == 1 ? 'More is better' : 'Less is better'}
             disabled={!(metricEditor.subject.name && metricEditor.subject.value)}

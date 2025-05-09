@@ -1,4 +1,4 @@
-type AppEvent = 'WorkoutAdded' | 'DatasetEdit'
+type AppEvent = 'WorkoutAdded' | 'DatasetEdit' | 'ShowArchiving'
 type Handler = (details?: any) => void
 type Handlers = {[K in AppEvent]: Handler[]}
 
@@ -6,6 +6,7 @@ class AppEvents {
     private handlers: Handlers = {
         WorkoutAdded: [],
         DatasetEdit: [],
+        ShowArchiving: [],
     }
 
     listen(event: AppEvent, handler: Handler) {
