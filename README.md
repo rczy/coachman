@@ -1,5 +1,4 @@
 # Coachman
 
 ## TODO:
-- splash screen
-- (mobile build; capacitor?)
+- add proper README

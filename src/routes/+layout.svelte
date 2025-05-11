@@ -13,6 +13,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>Coachman</title>
+</svelte:head>
+
 <NavBar />
 
 {#key data.url}

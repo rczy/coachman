@@ -11,6 +11,7 @@
     import { persistence } from '$lib/peristence';
     import Icon from '../Icon.svelte';
     import { fade } from 'svelte/transition';
+    import { base } from '$app/paths';
 
     interface Props {
         currentIdx: number
@@ -196,7 +197,7 @@
 
 {#snippet doIt(workout: Workout)}
     {#if workout.exercises.length}
-        <a class="btn btn-accent btn-block sm:basis-1/2" href={`/do-it/${workout._id}`}>Let's do it!</a>
+        <a class="btn btn-accent btn-block sm:basis-1/2" href={`${base}/do-it/${workout._id}`}>Let's do it!</a>
     {:else}
         <button class="btn btn-accent btn-block sm:basis-1/2" disabled>Let's do it!</button>
     {/if}

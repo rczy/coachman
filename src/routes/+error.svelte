@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { base } from '$app/paths';
 	import { page } from '$app/state';
 </script>
 
@@ -9,7 +10,7 @@
             <p class="py-6">
                 {page.error?.message}
             </p>
-            <a href="/" class="btn btn-accent">Return to the gym</a>
+            <a href="{base}/" class="btn btn-accent">Return to the gym</a>
         </div>
     </div>
 </div>

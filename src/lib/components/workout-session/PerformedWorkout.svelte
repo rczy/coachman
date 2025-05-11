@@ -8,6 +8,7 @@
     import Confetti from 'svelte-confetti'
     import { getDataURLs } from "$lib/confetti-emojis";
     import { persistence } from "$lib/peristence";
+    import { base } from "$app/paths";
 
     interface Props {
         workout: Workout
@@ -52,7 +53,7 @@
             onclick={() => {
                 workout.sessions.push(workoutSession)
                 persistence.updateWorkout(workout._id, {sessions: $state.snapshot(workout.sessions)})
-                goto(`/${workout._id}`)
+                goto(`${base}/${workout._id}`)
             }}
         >
             Finish session
