@@ -10,6 +10,7 @@
     import Confirmation from '../modals/Confirmation.svelte';
     import { persistence } from '$lib/peristence';
     import Icon from '../Icon.svelte';
+    import { fade } from 'svelte/transition';
 
     interface Props {
         currentIdx: number
@@ -202,15 +203,19 @@
 {/snippet}
 
 {#snippet noWorkout()}
-    <div class="card bg-base-200 shadow-md flex-[0_0_100%] min-w-0">
+    <div class={["card bg-base-200 shadow-md flex-[0_0_100%] min-w-0", {skeleton: !workoutStore.loaded}]}>
         <div class="card-body">
             <div class="card-title mb-2 size-10"></div>
-            <div class="min-h-100 max-h-100 flex flex-col items-center justify-center gap-5">
-                <button class="btn btn-accent" onclick={() => addNew()}>
-                    Add a workout
-                </button>
-                <span>OR</span>
-                <button class="btn" onclick={() => appEvents.emit('ShowArchiving')}>Import</button>
+            <div class="min-h-100 max-h-100 flex items-center justify-center">
+                {#if workoutStore.loaded}
+                    <div class="flex flex-col items-center gap-5" in:fade>
+                        <button class="btn btn-accent" onclick={() => addNew()}>
+                            Add a workout
+                        </button>
+                        <span>OR</span>
+                        <button class="btn" onclick={() => appEvents.emit('ShowArchiving')}>Import</button>
+                    </div>
+                {/if}
             </div>
             <div class="card-actions justify-center mt-4 size-10"></div>
         </div>
