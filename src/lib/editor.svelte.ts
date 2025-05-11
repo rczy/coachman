@@ -43,13 +43,6 @@ abstract class Editor<T extends {_id: string}> {
         this.cancel()
     }
 
-    clone(item: T, container: T[] = []): void {
-        const idx = container.findIndex(el => item._id === el._id)
-        const cloned = structuredClone(item)
-        cloned._id = crypto.randomUUID()
-        container.splice(idx + 1, 0, cloned)
-    }
-
     remove(item: T, container: T[] = []) {
         const idx = container.indexOf(item)
         if (idx > -1) {

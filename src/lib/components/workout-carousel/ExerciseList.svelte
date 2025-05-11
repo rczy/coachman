@@ -22,6 +22,18 @@
         updateWorkout()
     }
 
+    const clone = (exercise: Exercise) => {
+        const idx = exercises.findIndex(el => el._id === exercise._id)
+        const cloned = structuredClone($state.snapshot(exercise))
+        cloned._id = crypto.randomUUID()
+        for (const metric of cloned.metrics) {
+            metric._id = crypto.randomUUID()
+            metric.marked = false
+        }
+        exercises.splice(idx + 1, 0, cloned)
+        updateWorkout()
+    }
+
     const updateWorkout = () => {
         persistence.updateWorkout(workout._id, {exercises: $state.snapshot(exercises)})
     }
@@ -77,10 +89,9 @@
             {title: "Edit", icon: "Edit", action: () => 
                 exerciseEditor.edit($state.snapshot(exercise), exercises, () => updateWorkout())
             },
-            {title: "Clone", icon: "Clone", action: () => {
-                exerciseEditor.clone($state.snapshot(exercise), exercises)
-                updateWorkout()
-            }},
+            {title: "Clone", icon: "Clone", action: () =>
+                clone(exercise)
+            },
             {title: "Remove", icon: "Remove", action: () => {
                 deleteConfirmation.show(`Remove "${exercise.name}"?`, () => {
                     exerciseEditor.remove(exercise, exercises)

@@ -9,6 +9,7 @@
     import { appEvents } from '$lib/app-events';
     import Confirmation from '../modals/Confirmation.svelte';
     import { persistence } from '$lib/peristence';
+    import Icon from '../Icon.svelte';
 
     interface Props {
         currentIdx: number
@@ -19,8 +20,7 @@
     let disableNext = $state(true);
     let listLength = $derived(workoutStore.list.length)
 
-    // svelte-ignore non_reactive_update
-    let deleteConfirmation: Confirmation
+    let deleteConfirmation = $state({} as Confirmation)
 
     let emblaApi: EmblaCarouselType;
     let options: EmblaOptionsType = { loop: false };
@@ -128,8 +128,8 @@
     <div class="flex justify-between px-3">
         {#if listLength > 1}
             <div class="flex gap-2">
-                <button class="btn" onclick="{() => emblaApi?.scrollPrev()}" disabled="{disablePrev}">❮</button>
-                <button class="btn" onclick="{() => emblaApi?.scrollNext()}" disabled="{disableNext}">❯</button>
+                <button class="btn" onclick="{() => emblaApi?.scrollPrev()}" disabled="{disablePrev}"><Icon type="Left"/></button>
+                <button class="btn" onclick="{() => emblaApi?.scrollNext()}" disabled="{disableNext}"><Icon type="Right"/></button>
             </div>
             <div class="flex items-center gap-1">
                 {#each workoutStore.list as workout, idx}
